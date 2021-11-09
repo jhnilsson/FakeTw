@@ -27,3 +27,6 @@ hs_err_pid*
 
 restserver/.idea/
 restserver/.idea
+/client/client.iml
+/client/node_modules/
+/client/package.json
