@@ -11,8 +11,8 @@
 	<groupId>com.faketwitter</groupId>
 	<artifactId>restserver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>restserver</name>
-	<description>Backend part of laboration 1</description>
+	<name>RestServer</name>
+	<description>Backend part of Laboration 1</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -26,6 +26,15 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 

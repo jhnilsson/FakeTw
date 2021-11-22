@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+
 import './App.css';
+import {Route, Routes} from 'react-router-dom';
+import React from 'react';
+import CreateUserComponent from './components/user/CreateUserComponent';
+import IntroPage from './components/IntroPage';
+import NavigationBar from './components/NavigationBar';
+import PersonalLog from './components/PersonalLog';
+import {AuthProvider} from './components/user/useAuth';
+import {LoginComponent} from './components/user/LoginComponent';
+import ShowOtherLog from './components/ShowOtherLog';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<NavigationBar />}>
+            <Route index element={<IntroPage />} />
+            <Route path="login" element={<LoginComponent />} />
+            <Route path="personal_log" element={<PersonalLog/>} />
+            <Route path="register" element={<CreateUserComponent />} />
+            <Route path="search" element={<ShowOtherLog />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </div>
   );
 }

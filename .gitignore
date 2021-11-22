@@ -30,3 +30,6 @@ restserver/.idea
 /client/client.iml
 /client/node_modules/
 /client/package.json
+/node_modules/
+/package.json
+/package-lock.json
