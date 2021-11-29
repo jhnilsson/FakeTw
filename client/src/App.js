@@ -1,6 +1,6 @@
 
 import './App.css';
-import {Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import React from 'react';
 import CreateUserComponent from './components/user/CreateUserComponent';
 import IntroPage from './components/IntroPage';
@@ -9,6 +9,9 @@ import PersonalLog from './components/PersonalLog';
 import {AuthProvider} from './components/user/useAuth';
 import {LoginComponent} from './components/user/LoginComponent';
 import ShowOtherLog from './components/ShowOtherLog';
+import ShowMessage from './components/message/ShowMessage';
+import SendMessage from './components/message/SendMessage';
+import useAuth from './components/user/useAuth';
 
 function App() {
   return (
@@ -18,14 +21,24 @@ function App() {
           <Route path="/" element={<NavigationBar />}>
             <Route index element={<IntroPage />} />
             <Route path="login" element={<LoginComponent />} />
-            <Route path="personal_log" element={<PersonalLog/>} />
-            <Route path="register" element={<CreateUserComponent />} />
             <Route path="search" element={<ShowOtherLog />} />
+            <Route path="personal_log" element={<RequireAuth><PersonalLog/></RequireAuth>} />
+            <Route path="register" element={<CreateUserComponent />} />
+            <Route path="messages" element={<RequireAuth><ShowMessage /></RequireAuth>} />
+            <Route path="send_message" element={<RequireAuth><SendMessage /></RequireAuth>} />
           </Route>
         </Routes>
       </AuthProvider>
     </div>
   );
+}
+
+function RequireAuth({ children }) {
+  const { authed } = useAuth();
+
+  return authed === true
+      ? children
+      : <Navigate to="/login" replace />;
 }
 
 export default App;

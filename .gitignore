@@ -33,3 +33,4 @@ restserver/.idea
 /node_modules/
 /package.json
 /package-lock.json
+/restserver/target/

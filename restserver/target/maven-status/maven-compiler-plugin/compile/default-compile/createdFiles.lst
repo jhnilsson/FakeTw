@@ -1,0 +1,14 @@
+com\faketwitter\restserver\rest\UserRESTController.class
+com\faketwitter\restserver\rest\MessageRESTController.class
+com\faketwitter\restserver\repositories\projections\PrivateMessagesOnly.class
+com\faketwitter\restserver\repositories\UserRepository.class
+com\faketwitter\restserver\error\UserNotFoundException.class
+com\faketwitter\restserver\view\UserView.class
+com\faketwitter\restserver\repositories\MessageRepository.class
+com\faketwitter\restserver\models\User.class
+com\faketwitter\restserver\handler\UserHandler.class
+com\faketwitter\restserver\RestServerApplication.class
+com\faketwitter\restserver\models\Message.class
+com\faketwitter\restserver\repositories\projections\LogMessagesOnly.class
+com\faketwitter\restserver\handler\MessageHandler.class
+com\faketwitter\restserver\WebConfig.class
