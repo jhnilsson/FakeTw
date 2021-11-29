@@ -8,9 +8,12 @@ import com.faketwitter.restserver.repositories.UserRepository;
 import com.faketwitter.restserver.repositories.projections.LogMessagesOnly;
 import com.faketwitter.restserver.repositories.projections.PrivateMessagesOnly;
 import com.faketwitter.restserver.view.UserView;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,30 +42,37 @@ public class UserHandler {
     return userList;
   }
 
+  /**
+   * Gets user by its id.
+   * @param id - id of the user
+   * @return A user if one exists or null otherwise.
+   */
   public Optional<User> getUserById(long id){
     return userRepository.findById(id);
   }
 
+  /**
+   * Saves a user to the database.
+   * @param user - the user to be saved
+   * @return The user if it was saved successfully.
+   */
   public User save(User user){
     return userRepository.save(user);
   }
 
   public List<Message> getUserLogMessagesById(long id) {
     LogMessagesOnly messageCollection = userRepository.findLogMessagesById(id);
-    List<Message> logMessages = messageCollection.getLogMessages();
-    return logMessages;
+    return messageCollection.getLogMessages();
   }
 
   public List<Message> getUserLogMessagesByUsername(String username) {
     LogMessagesOnly messageCollection = userRepository.findLogMessagesByUsername(username);
-    List<Message> logMessages = messageCollection.getLogMessages();
-    return logMessages;
+    return messageCollection.getLogMessages();
   }
 
   public List<Message> getUserPrivateMessagesByUsername(String username) {
     PrivateMessagesOnly messageCollection = userRepository.findPrivateMessagesByUsername(username);
-    List<Message> privateMessages = messageCollection.getPrivateMessages();
-    return privateMessages;
+    return messageCollection.getPrivateMessages();
   }
 
   public Optional<User> getUserByUsername(String username) {
@@ -70,7 +80,7 @@ public class UserHandler {
   }
 
   @Transactional(rollbackFor = {SQLException.class})
-  public void saveLogMessage(String username, String messageBody) {
+  public Message saveLogMessage(String username, String messageBody) {
     Optional<User> user = userRepository.findUserByUsername(username);
     if(user.isPresent()){
       User userRef = user.get();
@@ -81,11 +91,15 @@ public class UserHandler {
       Message mRef = messageRepository.save(m);
       userRef.getLogMessages().add(mRef);
       userRepository.save(userRef);
+
+      return mRef;
+    } else {
+      throw new UserNotFoundException(username);
     }
   }
 
   @Transactional(rollbackFor = {SQLException.class})
-  public void sendPrivateMessage(String writtenBy, String messageBody, String sendTo) {
+  public Message sendPrivateMessage(String writtenBy, String messageBody, String sendTo) {
     Optional<User> optSender = userRepository.findUserByUsername(writtenBy);
     Optional<User> optRecipient = userRepository.findUserByUsername(sendTo);
 
@@ -101,6 +115,10 @@ public class UserHandler {
 
       recipient.getPrivateMessages().add(mRef);
       userRepository.save(recipient);
+
+      return mRef;
+    } else {
+      throw new UserNotFoundException("Either sender or recipient does not exist!");
     }
   }
 
@@ -120,7 +138,7 @@ public class UserHandler {
     );
 
     if(user.getPassword().equals(password))
-      return Optional.ofNullable(user);
+      return Optional.of(user);
     else
       return Optional.empty();
 

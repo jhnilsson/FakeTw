@@ -24,11 +24,6 @@ public class MessageRESTController {
     this.messageHandler = messageHandler;
   }
 
-  @GetMapping("")
-  public List<Message> getAllMessages(){
-    return messageHandler.getAllMessages();
-  }
-
   @PostMapping("")
   public void saveMessage(@RequestBody Message message){
     messageHandler.saveMessage(message);

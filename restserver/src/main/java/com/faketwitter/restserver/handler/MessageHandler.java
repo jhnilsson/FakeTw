@@ -1,7 +1,6 @@
 package com.faketwitter.restserver.handler;
 
 import com.faketwitter.restserver.models.Message;
-import com.faketwitter.restserver.models.User;
 import com.faketwitter.restserver.repositories.MessageRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +18,19 @@ public class MessageHandler {
     this.messageRepository = messageRepository;
   }
 
+  /**
+   * Gets a message by its id
+   * @param id - the messages' id
+   * @return The message
+   */
   public Optional<Message> getMessage(long id){
     return messageRepository.findById(id);
   }
 
-  public List<Message> getAllMessages() {
-    List<Message> messages = new ArrayList<>();
-    Iterable<Message> messageIter = messageRepository.findAll();
-
-    for(Message m : messageIter){
-      messages.add(m);
-    }
-
-    return messages;
-  }
-
+  /**
+   * Creates a new message
+   * @param message The message to be created
+   */
   public void saveMessage(Message message){
     messageRepository.save(message);
   }

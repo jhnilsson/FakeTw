@@ -1,5 +1,6 @@
 package com.faketwitter.restserver;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -21,7 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
@@ -181,6 +184,90 @@ public class UserControllerTest {
         .content(asJsonString(new Credentials("", ""))))
         .andExpect(status().isNotFound());
 
+
+  }
+
+  private class PersonalLogForm {
+    private String messageBody;
+    private String writtenBy;
+
+    public PersonalLogForm(String messageBody, String writtenBy) {
+      this.messageBody = messageBody;
+      this.writtenBy = writtenBy;
+    }
+
+    public String getMessageBody() {
+      return messageBody;
+    }
+
+    public String getWrittenBy() {
+      return writtenBy;
+    }
+  }
+
+  private class SendMessageForm {
+    private String messageBody;
+    private String writtenBy;
+    private String sendTo;
+
+    public SendMessageForm(String messageBody, String writtenBy, String sendTo) {
+      this.messageBody = messageBody;
+      this.writtenBy = writtenBy;
+      this.sendTo = sendTo;
+    }
+
+    public String getMessageBody() {
+      return messageBody;
+    }
+
+    public String getWrittenBy() {
+      return writtenBy;
+    }
+
+    public String getSendTo() {
+      return sendTo;
+    }
+  }
+
+  @Test
+  public void testSavePersonalLog() throws Exception {
+
+    PersonalLogForm personalLogForm = new PersonalLogForm("heya",mockUserTwo.getUsername());
+    Message message = new Message(5L,"heya",mockUserTwo);
+
+    when(userHandler.saveLogMessage( mockUserTwo.getUsername(),"heya")).thenReturn(message);
+
+    MvcResult result = mockMvc.perform(post("/api/users/log/add/byname")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(personalLogForm)))
+        .andExpect(status().isOk()).andReturn();
+
+    assertThat(result).isNotNull();
+    String json = result.getResponse().getContentAsString();
+    System.out.println(json);
+    assertThat(json).isNotEmpty();
+    assertThat(json).isEqualToIgnoringCase(asJsonString(message));
+
+  }
+
+  @Test
+  public void testSendMessage() throws Exception {
+
+    SendMessageForm sendMessageForm = new SendMessageForm("heya",mockUserTwo.getUsername(),mockUserOne.getUsername());
+    Message message = new Message(5L,"heya",mockUserTwo);
+
+    when(userHandler.sendPrivateMessage(mockUserTwo.getUsername(),"heya", mockUserOne.getUsername())).thenReturn(message);
+
+    MvcResult result = mockMvc.perform(post("/api/users/messages/add/byname")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(sendMessageForm)))
+        .andExpect(status().isOk()).andReturn();
+
+    assertThat(result).isNotNull();
+    String json = result.getResponse().getContentAsString();
+    System.out.println(json);
+    assertThat(json).isNotEmpty();
+    assertThat(json).isEqualToIgnoringCase(asJsonString(message));
 
   }
 

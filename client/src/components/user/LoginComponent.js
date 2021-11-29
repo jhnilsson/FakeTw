@@ -8,10 +8,8 @@ export const LoginComponent = () => {
   const handleLogin = (event) => {
     event.preventDefault();
     login(event.target.username.value, event.target.password.value).then(() => {
-      console.log("Promise resolved!");
       navigate('/personal_log');
     }).catch(() => {
-      console.error("Promise rejected!");
       navigate('/login')
     });
   }

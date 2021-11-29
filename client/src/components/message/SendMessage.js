@@ -35,15 +35,13 @@ class SendMessage extends Component {
 
     if(!response.ok){
       alert("Could not send message!");
-      throw Error(response.statusText);
+    } else {
+      alert("Message sent!");
+      this.setState({
+        messageBody: '',
+        recipient: ''
+      });
     }
-
-    alert("Message sent!");
-    this.setState({
-      messageBody: '',
-      recipient: ''
-    });
-
   }
 
   onInputChange(event) {
@@ -61,10 +59,10 @@ class SendMessage extends Component {
             <div className="col-4">
               <form onSubmit={this.handleSubmit}>
                 <label htmlFor="messageCompose">New message</label>
-                <input className="form-control" type="text" name="messageBody" value={this.state.messageBody}
+                <textarea className="form-control h-50" name="messageBody" value={this.state.messageBody}
                        onChange={this.onInputChange} placeholder="Enter new message"
                        aria-label="Enter new message"/>
-                <input className="form-control" type="text" name="recipient" value={this.state.recipient}
+                <input className="form-control w-50" type="text" name="recipient" value={this.state.recipient}
                        onChange={this.onInputChange} placeholder="Enter recipient"/>
                 <button className="btn btn-outline-success"
                         type="submit">Submit

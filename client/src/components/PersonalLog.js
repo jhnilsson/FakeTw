@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import {authContext} from './user/useAuth';
-import {Container, Row} from 'react-bootstrap';
+import {Container} from 'react-bootstrap';
 
 
 
@@ -96,8 +96,8 @@ function MessageCompose(props) {
         <div className="row justify-content-center align-items-center">
           <div className="col-4">
             <form onSubmit={submit}>
-              <label for="messageCompose">New message</label>
-              <input className="form-control" type="search" name="messageBox" value={messageBox} onChange={onChange}
+              <label htmlFor="messageCompose">New message</label>
+              <textarea className="form-control" name="messageBox" value={messageBox} onChange={onChange}
                        placeholder="Enter new message" aria-label="Enter new message" />
 
               <button className="btn btn-outline-success"

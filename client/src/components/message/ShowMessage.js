@@ -1,6 +1,6 @@
 import {Component} from 'react';
 import {authContext} from '../user/useAuth';
-import {Container} from 'react-bootstrap';
+import {Col, Container, Row, Table} from 'react-bootstrap';
 
 class ShowMessage extends Component {
 
@@ -13,29 +13,26 @@ class ShowMessage extends Component {
     }
   }
 
-  async componentDidMount() {
+  componentDidMount() {
 
     const auth = this.context
-    try {
-      const response = await fetch(
-          "http://localhost:8080/api/users/messages/name/" + auth.username, {
-            method: "GET",
-            headers: {
-              "Accept": "application/json"
-            }
-          });
 
-      if(!response.ok){
-        alert("Could not get messages!");
-        throw Error(response.statusText);
-      }
-
-      const json = await response.json();
-      this.setState({messages: json});
-
-    } catch (error) {
-      alert(error);
-    }
+    fetch(
+      "http://localhost:8080/api/users/messages/name/" + auth.username, {
+        method: "GET",
+        headers: {
+          "Accept": "application/json",
+          'Content-Type': 'application/json'
+        }
+      }).then(r => {
+        if(!r.ok){
+          alert("Could not get messages!");
+          throw Error(r.statusText);
+        }
+        return r.json();
+    }).then(r => {
+      this.setState({messages: r});
+    });
   }
 
   render() {
@@ -50,15 +47,44 @@ class ShowMessage extends Component {
 function MessageList(props) {
 
   const messages = props.messages || [];
+  console.log(messages.map((message) => console.log(message.writtenBy)));
+  let userMap = new Map();
+  messages.map((message) => {
+    if(message.writtenBy.username != null){
+      userMap.set(message.writtenBy.id, message.writtenBy);
+    }
+  });
+
   const messageList = messages.map((message) =>
       <>
-        <li className="list-group-item col-4">
-          {message.messageBody}
-        </li>
+        <tr>
+          <td>
+            {message.messageBody}
+          </td>
+          <td>
+            { message.writtenBy.username || userMap.get(message.writtenBy).username }
+          </td>
+        </tr>
       </>)
 
   return (
-      <ul className="row justify-content-center align-items-center list-group">{messageList}</ul>
+      <Container>
+        <Row  className="justify-content-center align-items-center">
+          <Col md={6} className="mx-auto">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Message</th>
+                  <th>Sender</th>
+                </tr>
+              </thead>
+              <tbody>
+                {messageList}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
   );
 }
 

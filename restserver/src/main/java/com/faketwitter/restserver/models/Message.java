@@ -62,4 +62,13 @@ public class Message {
   public void setWrittenBy(User writtenBy) {
     this.writtenBy = writtenBy;
   }
+
+  @Override
+  public String toString() {
+    return "Message{" +
+        "id=" + id +
+        ", messageBody='" + messageBody + '\'' +
+        ", writtenBy=" + writtenBy +
+        '}';
+  }
 }
