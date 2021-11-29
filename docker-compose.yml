@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: client
+    volumes:
+      - ./client:/usr/src/app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - web
+    command: npm start
+
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: autumn
+      MYSQL_DATABASE: faketwitter
+    ports:
+      - '3400:3306'
+
+  web:
+    build:
+      context: ./restserver
+      dockerfile: Dockerfile
+    image: restserver
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/faketwitter
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=autumn
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
