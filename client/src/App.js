@@ -12,6 +12,7 @@ import ShowOtherLog from './components/ShowOtherLog';
 import ShowMessage from './components/message/ShowMessage';
 import SendMessage from './components/message/SendMessage';
 import useAuth from './components/user/useAuth';
+import Whiteboard from './components/whiteboard/Whiteboard';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="register" element={<CreateUserComponent />} />
             <Route path="messages" element={<RequireAuth><ShowMessage /></RequireAuth>} />
             <Route path="send_message" element={<RequireAuth><SendMessage /></RequireAuth>} />
+            <Route path="whiteboard" element={<RequireAuth><Whiteboard/></RequireAuth>} />
           </Route>
         </Routes>
       </AuthProvider>

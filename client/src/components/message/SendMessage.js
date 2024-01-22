@@ -20,7 +20,7 @@ class SendMessage extends Component {
     event.preventDefault();
     const auth = this.context
 
-    const response = await fetch("http://localhost:8080/api/users/messages/add/byname", {
+    const response = await fetch("http://localhost:8082/api/private_messages/", {
       method: "POST",
       headers: {
         "Accept": "application/json",

@@ -19,7 +19,7 @@ class PersonalLog extends Component {
     event.preventDefault();
     const auth = this.context;
     const username = auth.username;
-    await fetch("http://localhost:8080/api/users/log/add/byname", {
+    await fetch("http://localhost:8081/api/log_messages/", {
       method: "POST",
       headers: {
         "Accept": "application/json",
@@ -48,7 +48,7 @@ class PersonalLog extends Component {
     const auth = this.context;
 
     try {
-      const response = await fetch("http://localhost:8080/api/users/log/name/" + (this.props.username || auth.username), {
+      const response = await fetch("http://localhost:8081/api/log_messages/name/" + (this.props.username || auth.username), {
         method: "GET",
         headers: {
           "accept": "application/json",

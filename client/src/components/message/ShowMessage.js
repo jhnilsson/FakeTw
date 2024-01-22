@@ -18,7 +18,7 @@ class ShowMessage extends Component {
     const auth = this.context
 
     fetch(
-      "http://localhost:8080/api/users/messages/name/" + auth.username, {
+      "http://localhost:8082/api/private_messages/name/" + auth.username, {
         method: "GET",
         headers: {
           "Accept": "application/json",

@@ -11,29 +11,82 @@ services:
     ports:
       - '3000:3000'
     depends_on:
-      - web
+      - web-USER
+      - web-LOG
+      - web-PM
     command: npm start
 
-  db:
+  db-user:
     image: mysql
     restart: always
     environment:
+      MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: autumn
-      MYSQL_DATABASE: faketwitter
+      MYSQL_DATABASE: faketwitter_user
     ports:
       - '3400:3306'
 
-  web:
+  db-log:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: autumn
+      MYSQL_DATABASE: faketwitter_log
+    ports:
+      - '3401:3306'
+
+  db-pm:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: autumn
+      MYSQL_DATABASE: faketwitter_pm
+    ports:
+      - '3402:3306'
+
+  web-USER:
     build:
-      context: ./restserver
+      context: ./Rest-USER
       dockerfile: Dockerfile
     image: restserver
     ports:
       - '8080:8080'
     depends_on:
-      - db
+      - db-user
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/faketwitter
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-user:3306/faketwitter_user
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=autumn
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  web-PM:
+    build:
+      context: ./Rest-PM
+      dockerfile: Dockerfile
+    image: restpm
+    ports:
+      - '8082:8080'
+    depends_on:
+      - db-pm
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-pm:3306/faketwitter_pm
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=autumn
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  web-LOG:
+    build:
+      context: ./Rest-LOG
+      dockerfile: Dockerfile
+    image: restlog
+    ports:
+      - '8081:8080'
+    depends_on:
+      - db-log
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-log:3306/faketwitter_log
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=autumn
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

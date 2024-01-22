@@ -14,7 +14,7 @@ class ShowOtherLog extends Component {
   async handleSearch(event) {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:8080/api/users/log/name/"
+      const response = await fetch("http://localhost:8081/api/log_messages/name/"
           + event.target.username.value, {
         method: "GET",
         headers: {

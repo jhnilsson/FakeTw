@@ -38,8 +38,12 @@ function NavigationBar () {
                       <Link className="nav-link" to="/messages">Read Messages</Link>
                     </li>
                     <li className="nav-item">
-                      <Link className="nav-link" to="/send_message">Send Message</Link>
-                    </li></>) : (
+                    <Link className="nav-link" to="/send_message">Send Message</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/whiteboard">Whiteboard</Link>
+                    </li>
+                </>) : (
                     <>
                       <li className="nav-item">
                         <Link className="nav-link" to="/login">
